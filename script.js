@@ -2,6 +2,8 @@
   Copyright (c) Kenneth Chung
   twitter: @kentor
   github: kentor
+
+  created: Auguest 27, 2012
 */
 
 function componentToHex(c) {
@@ -117,6 +119,7 @@ $(document).ready(function() {
     }
   })
 
+  // TODO drag and drop
   // window.ondrop = function(e) {
   //   e.preventDefault()
 
