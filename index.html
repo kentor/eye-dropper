@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>What's That Color - Color Picker</title>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+  <script src="script.js"></script>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+  <div id="intro">
+    <div id="img"><img src="info.png"></div>
+    Copy and Paste the image you want to inspect
+    <p><a href="https://twitter.com/share" class="twitter-share-button" data-via="kentor">Tweet</a></p>
+  </div>
+
+  <div id="info">
+    <div id="hover" class="color-info">
+      <div id="color-hover" class="color-preview"></div>
+      hovering<br>
+      rgb <input type="text" size="11" id="rgb-hover"><br>
+      hex <input type="text" size="11" id="hex-hover">
+    </div>
+    <div id="saved" class="color-info">
+      <div id="color-saved" class="color-preview"></div>
+      locked (mouse 2)<br>
+      rgb <input type="text" size="11" id="rgb-saved"><br>
+      hex <input type="text" size="11" id="hex-saved">
+    </div>
+    <div id="zoomer">
+      <div id="coord"></div>
+      <canvas id="zoomed"></canvas>
+      <canvas id="crosshair" width="11px" height="11px"></canvas>
+    </div>
+  </div>
+
+  <div id="board">
+    <canvas id="source"></canvas>
+  </div>
+
+  <div id="scroller">
+  </div>
+</body>
+</html>
