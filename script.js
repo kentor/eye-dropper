@@ -35,7 +35,6 @@ function drawCrosshair(ctx, hex) {
 
 $(document).ready(function() {
   $('#intro').css('margin-top', -($('#intro').outerHeight() / 2))
-  $('#control').html(navigator.userAgent.match(/Mac/) ? '&#8984;' : 'Ctrl')
   $('#info').draggable()
 
   var crosshair = document.getElementById('crosshair').getContext('2d')
@@ -131,13 +130,9 @@ $(document).ready(function() {
   // }
 
   function createImage(source) {
-    $('#intro').remove()
-    $('#info').show().mouseleave(function() {
-      $(this).find('input').blur()
-    })
-
     var img = new Image()
     img.onload = function() {
+      $('#intro').remove()
       var canvas = document.getElementById('source')
         , ctx = canvas.getContext('2d')
       canvas.width = img.width
@@ -155,6 +150,10 @@ $(document).ready(function() {
       ztx.mozImageSmoothingEnabled = false
       ztx.webkitImageSmoothingEnabled = false
       ztx.drawImage(img, 0, 0, img.width * zoom, img.height * zoom)
+
+      $('#info').show().mouseleave(function() {
+        $(this).find('input').blur()
+      })
 
       $(canvas).mousemove(function(e) {
         var x = e.pageX
