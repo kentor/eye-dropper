@@ -34,14 +34,18 @@ function drawCrosshair(ctx, hex) {
 }
 
 $(document).ready(function() {
-  $('#intro').css('margin-top', -($('#intro').outerHeight() / 2))
+  function positionIntro() {
+    $('#intro').css('margin-top', -($('#intro').outerHeight() / 2))
+  }
+  positionIntro()
+  $(window).resize(positionIntro)
   $('#info').draggable()
 
   var crosshair = document.getElementById('crosshair').getContext('2d')
 
   /* dragging */
   $('#source').mousedown(function(e) {
-    if (e.which !== 1) return;
+    if (e.which !== 1) return
 
     var x0 = e.clientX
       , y0 = e.clientY
@@ -70,18 +74,21 @@ $(document).ready(function() {
 
   /* pasting */
   if (!window.Clipboard) {
-    var pasteCatcher = document.createElement("div")
+    var pasteCatcher = document.createElement('div')
     
-    pasteCatcher.setAttribute("contenteditable", "")
+    pasteCatcher.setAttribute('contenteditable', '')
+    pasteCatcher.style.position = 'absolute'
+    pasteCatcher.style.top = '-100%'
     
-    pasteCatcher.style.display = "none"
     document.body.appendChild(pasteCatcher)
 
     pasteCatcher.focus()
-    document.addEventListener("click", function() { pasteCatcher.focus() })
+    window.addEventListener('click', function() { 
+      pasteCatcher.focus()
+    })
   } 
 
-  window.addEventListener("paste", function(e) {
+  window.addEventListener('paste', function(e) {
     if (e.clipboardData) {
       var items = e.clipboardData.items
 
@@ -101,12 +108,12 @@ $(document).ready(function() {
       setTimeout(function() {
         var child = pasteCatcher.childNodes[0]
        
-        pasteCatcher.innerHTML = ""
+        pasteCatcher.innerHTML = ''
          
-        if (child && child.tagName === "IMG") {
+        if (child && child.tagName === 'IMG') {
           createImage(child.src)
         }
-      }, 1)
+      }, 0)
     }
   })
 
@@ -149,7 +156,7 @@ $(document).ready(function() {
       ztx.imageSmoothingEnabled = false
       ztx.mozImageSmoothingEnabled = false
       ztx.webkitImageSmoothingEnabled = false
-      ztx.drawImage(img, 0, 0, img.width * zoom, img.height * zoom)
+      ztx.drawImage(img, 0, 0, zoomed.width, zoomed.height)
 
       $('#info').show().mouseleave(function() {
         $(this).find('input').blur()

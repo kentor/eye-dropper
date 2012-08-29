@@ -18,6 +18,10 @@ body {
   margin-bottom: 0;
 }
 
+#desc {
+  font-size: 80%;
+}
+
 #img {
   width: 100%;
   display: block;
