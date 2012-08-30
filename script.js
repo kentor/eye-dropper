@@ -45,6 +45,10 @@ $(document).ready(function() {
 
   var crosshair = document.getElementById('crosshair').getContext('2d')
 
+  $('input').click(function() {
+    this.select()
+  })
+
   /* dragging */
   $('#source').mousedown(function(e) {
     if (e.which !== 1) return
