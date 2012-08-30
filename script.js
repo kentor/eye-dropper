@@ -41,13 +41,12 @@ $(document).ready(function() {
   }
   positionIntro()
   $(window).resize(positionIntro)
-  $('#info').draggable()
 
-  var crosshair = document.getElementById('crosshair').getContext('2d')
-
-  $('input').click(function() {
+  $('#info').draggable().find('input').click(function() {
     this.select()
   })
+
+  var crosshair = document.getElementById('crosshair').getContext('2d')
 
   /* dragging */
   $('#source').mousedown(function(e) {
@@ -80,29 +79,20 @@ $(document).ready(function() {
 
   /* pasting */
   if (!window.Clipboard) {
-    var pasteCatcher = document.createElement('div')
-    
-    pasteCatcher.setAttribute('contenteditable', '')
-    pasteCatcher.style.position = 'absolute'
-    pasteCatcher.style.top = '-100%'
-    
-    document.body.appendChild(pasteCatcher)
+    var pasteCatcher = $('<div>')
+                         .attr('contenteditable', '')
+                         .css('opacity', 0)
+                         .appendTo('body')
+                         .focus()
 
-    pasteCatcher.focus()
-    window.addEventListener('click', function() { 
-      pasteCatcher.focus()
-    })
+    $(window).click(function() { pasteCatcher.focus() })
   } 
 
   window.addEventListener('paste', function(e) {
     if (e.clipboardData) {
       var items = e.clipboardData.items
 
-      if (!items) return
-
-      for (var i = 0; i < items.length; i++) {
-        if (!items[i].type.match(/image/)) continue
-
+      if (items.length && items[0].type.match(/image/)) {
         var blob = items[i].getAsFile()
           , urlobj = window.URL || window.webkitURL
           , source = urlobj.createObjectURL(blob)
@@ -112,36 +102,27 @@ $(document).ready(function() {
     }
     else {
       setTimeout(function() {
-        var child = pasteCatcher.childNodes[0]
+        var child = pasteCatcher.find('img')[0]
+
+        pasteCatcher.empty()
        
-        pasteCatcher.innerHTML = ''
-         
-        if (child && child.tagName === 'IMG') {
-          createImage(child.src)
-        }
+        if (child) createImage(child.src)
       }, 0)
     }
   })
 
-  // TODO drag and drop
-  // window.ondrop = function(e) {
-  //   e.preventDefault()
+  window.addEventListener('drop', function(e) {
+    e.preventDefault()
 
-  //   files = e.dataTransfer.files
+    files = e.dataTransfer.files
 
-  //   if (files) {
-  //     for (var i = 0; i < files.length; i++) {
-  //       if (files[i].type.indexOf("image") !== -1) {
-  //         var URLObj = window.URL || window.webkitURL
-  //           , source = URLObj.createObjectURL(files[i])
-            
-  //         createImage(source)
-  //       }
-  //     }
-  //   }
-
-  //   return false
-  // }
+    if (files.length && files[0].type.match(/image/)) {
+      var urlobj = window.URL || window.webkitURL
+        , source = urlobj.createObjectURL(files[0])
+        
+      createImage(source)
+    }
+  })
 
   function createImage(source) {
     var img = new Image()
@@ -172,10 +153,10 @@ $(document).ready(function() {
       $(canvas).mousemove(function(e) {
         var x = e.pageX
           , y = e.pageY
-          , imgData = ctx.getImageData(x, y, 1, 1).data
-          , r = imgData[0]
-          , g = imgData[1]
-          , b = imgData[2]
+          , d = ctx.getImageData(x, y, 1, 1).data
+          , r = d[0]
+          , g = d[1]
+          , b = d[2]
           , ir = 255 - r
           , ig = 255 - g
           , ib = 255 - b
@@ -192,9 +173,7 @@ $(document).ready(function() {
           .css('top', -(zoom * y) + $('#zoomer').height() / 2)
 
         drawCrosshair(crosshair, 'rgba(' + ir + ',' + ig + ',' + ib + ',0.5)')
-      })
-
-      $(canvas).on('contextmenu', function(e) {
+      }).contextmenu(function(e) {
         $('#rgb-saved').val($('#rgb-hover').val())
         $('#hex-saved').val($('#hex-hover').val())
         $('#color-saved').css('background', $('#hex-hover').val())
