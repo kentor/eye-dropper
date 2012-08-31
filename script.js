@@ -92,8 +92,12 @@ $(document).ready(function() {
     if (e.clipboardData) {
       var items = e.clipboardData.items
 
-      if (items.length && items[0].type.match(/image/)) {
-        var blob = items[0].getAsFile()
+      if (!items) return
+
+      for (var i = 0; i < items.length; i++) {
+        if (!items[i].type.match(/image/)) continue
+          
+        var blob = items[i].getAsFile()
           , urlobj = window.URL || window.webkitURL
           , source = urlobj.createObjectURL(blob)
          
