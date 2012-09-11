@@ -73,8 +73,7 @@ $(document).ready(function() {
   })
 
   $('#scroller').on('mouseup mouseleave', function() {
-    $(this).css('z-index', -1)
-    $(this).unbind('mousemove')
+    $(this).css('z-index', -1).unbind('mousemove')
   })
 
   /* pasting */
@@ -91,8 +90,6 @@ $(document).ready(function() {
   window.addEventListener('paste', function(e) {
     if (e.clipboardData) {
       var items = e.clipboardData.items
-
-      if (!items) return
 
       for (var i = 0; i < items.length; i++) {
         if (!items[i].type.match(/image/)) continue
@@ -115,6 +112,7 @@ $(document).ready(function() {
     }
   })
 
+  /* dropping, only works on WebKit */
   window.addEventListener('drop', function(e) {
     e.preventDefault()
 
@@ -132,8 +130,10 @@ $(document).ready(function() {
     var img = new Image()
     img.onload = function() {
       $('#intro').remove()
+
       var canvas = document.getElementById('source')
         , ctx = canvas.getContext('2d')
+
       canvas.width = img.width
       canvas.height = img.height
       ctx.drawImage(img, 0, 0)
@@ -143,6 +143,7 @@ $(document).ready(function() {
       var zoomed = document.getElementById('zoomed')
         , ztx = zoomed.getContext('2d')
         , zoom = 3
+
       zoomed.width = img.width * zoom
       zoomed.height = img.height * zoom
       ztx.imageSmoothingEnabled = false
@@ -189,7 +190,7 @@ $(document).ready(function() {
           var hex = document.getElementById('hex-hover')
           hex.focus()
           hex.select()
-          setTimeout(function () { hex.blur() }, 100)
+          setTimeout(function() { hex.blur() }, 100)
         }
       })
 

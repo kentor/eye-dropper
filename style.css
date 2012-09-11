@@ -23,17 +23,17 @@ body {
 }
 
 #img {
-  width: 100%;
   display: block;
   margin: auto;
   position: absolute;
   top: -240px;
+  width: 100%;
 }
 
 #scroller {
+  left: 0;
   position: absolute;
   top: 0;
-  left: 0;
   z-index: -1;
 }
 
@@ -55,15 +55,15 @@ body {
 }
 
 #zoomer {
-  background-image: -webkit-linear-gradient(-45deg, #eee 25%, #ddd 25%, #ddd 50%, #eee 50%, #eee 75%, #ddd 75%);
   background-image: -moz-linear-gradient(-45deg, #eee 25%, #ddd 25%, #ddd 50%, #eee 50%, #eee 75%, #ddd 75%);
   background-image: -o-linear-gradient(-45deg, #eee 25%, #ddd 25%, #ddd 50%, #eee 50%, #eee 75%, #ddd 75%);
+  background-image: -webkit-linear-gradient(-45deg, #eee 25%, #ddd 25%, #ddd 50%, #eee 50%, #eee 75%, #ddd 75%);
   background-size: 20px 20px;
   border: 1px solid #fff;
   height: 80px;
+  outline: 1px solid #000;
   overflow: hidden;
   position: relative;
-  outline: 1px solid #000;
 }
 
 #zoomed {
@@ -71,10 +71,10 @@ body {
 }
 
 #crosshair {
-  position: absolute;
-  z-index: 3;
   left: 84px;
+  position: absolute;
   top: 35px;
+  z-index: 3;
 }
 
 #hover {
@@ -82,32 +82,32 @@ body {
 }
 
 .color-info {
-  background: -webkit-linear-gradient(top, #eee, #ddd);
   background: -moz-linear-gradient(top, #eee, #ddd);
   background: -o-linear-gradient(top, #eee, #ddd);
+  background: -webkit-linear-gradient(top, #eee, #ddd);
   border-top: 1px solid #fff;
-  font-size: 12px;
   font-family: monospace;
+  font-size: 12px;
   padding: 5px;
   text-shadow: 0px 1px 0px #fff;
 }
 
 .color-info:after {
+  clear: both;
   content: ".";
   display: block;
-  clear: both;
-  visibility: hidden;
-  line-height: 0;
   height: 0;
+  line-height: 0;
+  visibility: hidden;
 }
 
 .color-info input {
   background-color: transparent;
-  font-size: 11px;
-  padding: 0;
   border: 0;
-  outline: 0;
   font-family: monospace;
+  font-size: 11px;
+  outline: 0;
+  padding: 0;
   text-shadow: 0px 1px 0px #fff;
 }
 
@@ -122,16 +122,16 @@ body {
 }
 
 #coord {
+  font-size: 10px;
   left: 2px;
   position: absolute;
   top: 0;
   z-index: 2;
-  font-size: 10px;
 }
 
 #drop {
+  height: 100%;
   position: fixed;
   width: 100%;
-  height: 100%;
   z-index: 10;
 }
