@@ -15,8 +15,8 @@ function rgbToHex(r, g, b) {
   return '#' + componentToHex(r) + componentToHex(g) + componentToHex(b)
 }
 
-function drawCrosshair(ctx, hex) {
-  ctx.strokeStyle = hex
+function drawCrosshair(ctx, r, g, b) {
+  ctx.strokeStyle = 'rgba(' + r + ',' + g + ',' + b + ',0.5)'
   ctx.beginPath()
   ctx.moveTo(5.5, 0)
   ctx.lineTo(5.5, 4)
@@ -36,45 +36,25 @@ function drawCrosshair(ctx, hex) {
 }
 
 $(document).ready(function() {
-  function positionIntro() {
-    $('#intro').css('margin-top', -($('#intro').outerHeight() / 2))
-  }
-  positionIntro()
-  $(window).resize(positionIntro)
+  var _mouseDown = false
+
+  $(window).resize(function() {
+    var intro = $('#intro')
+    intro.css('margin-top', -intro.outerHeight() / 2)
+  }).resize().mousedown(function(e) {
+    _mouseDown = true
+    _x0 = e.clientX
+    _y0 = e.clientY
+    e.preventDefault()
+  }).on('mouseup mouseleave', function() {
+    _mouseDown = false
+  })
 
   $('#info').draggable().find('input').click(function() {
     this.select()
   })
 
   var crosshair = document.getElementById('crosshair').getContext('2d')
-
-  /* dragging */
-  $('#source').mousedown(function(e) {
-    if (e.which !== 1) return
-
-    var x0 = e.clientX
-      , y0 = e.clientY
-
-    $('#scroller')
-      .css('z-index', 100)
-      .on('mousemove', function(e) {
-        var st = $(window).scrollTop()
-          , sl = $(window).scrollLeft()
-
-        $(window).scrollTop(st + y0 - e.clientY).scrollLeft(sl + x0 - e.clientX)
-
-        x0 = e.clientX
-        y0 = e.clientY
-
-        e.preventDefault()
-      })
-
-    e.preventDefault()
-  })
-
-  $('#scroller').on('mouseup mouseleave', function() {
-    $(this).css('z-index', -1).unbind('mousemove')
-  })
 
   /* pasting */
   if (!window.Clipboard) {
@@ -177,7 +157,18 @@ $(document).ready(function() {
           .css('left', -(zoom * x) + $('#zoomer').width() / 2)
           .css('top', -(zoom * y) + $('#zoomer').height() / 2)
 
-        drawCrosshair(crosshair, 'rgba(' + ir + ',' + ig + ',' + ib + ',0.5)')
+        drawCrosshair(crosshair, ir, ig, ib)
+
+        if (_mouseDown) {
+          var $window = $(window)
+            , st = $window.scrollTop()
+            , sl = $window.scrollLeft()
+
+          $window.scrollTop(st + _y0 - e.clientY).scrollLeft(sl + _x0 - e.clientX)
+
+          _x0 = e.clientX
+          _y0 = e.clientY
+        }
       }).contextmenu(function(e) {
         $('#rgb-saved').val($('#rgb-hover').val())
         $('#hex-saved').val($('#hex-hover').val())
