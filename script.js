@@ -102,14 +102,9 @@ $(document).ready(function() {
     img.onload = function() {
       $('#intro').remove()
 
-      var canvas = document.getElementById('source')
-        , ctx = canvas.getContext('2d')
-
-      canvas.width = img.width
-      canvas.height = img.height
-      ctx.drawImage(img, 0, 0)
-
-      $('#board').show().append(canvas)
+      $('#info').show().mouseleave(function() {
+        $(this).find('input').blur()
+      })
 
       var zoomed = document.getElementById('zoomed')
         , ztx = zoomed.getContext('2d')
@@ -122,63 +117,73 @@ $(document).ready(function() {
       ztx.webkitImageSmoothingEnabled = false
       ztx.drawImage(img, 0, 0, zoomed.width, zoomed.height)
 
-      $('#info').show().mouseleave(function() {
-        $(this).find('input').blur()
-      })
+      var canvas = document.getElementById('source')
+        , ctx = canvas.getContext('2d')
 
-      $(canvas).on('mousemove.color', function(e) {
-        var x = e.pageX
-          , y = e.pageY
-          , d = ctx.getImageData(x, y, 1, 1).data
-          , r = d[0]
-          , g = d[1]
-          , b = d[2]
-          , ir = 255 - r
-          , ig = 255 - g
-          , ib = 255 - b
-          , hex = rgbToHex(r, g, b)
-          , inv = rgbToHex(ir, ig, ib)
+      canvas.width = img.width
+      canvas.height = img.height
+      ctx.drawImage(img, 0, 0)
 
-        $('#coord').html(x + ' x ' + y).css('color', inv)
-        $('#rgb-hover').val(r + ',' + g + ',' + b)
-        $('#hex-hover').val(hex)
-        $('#color-hover').css('background', hex)
+      $('#board').show().append(canvas)
 
-        $('#zoomed')
-          .css('left', -(zoom * x) + $('#zoomer').width() / 2)
-          .css('top', -(zoom * y) + $('#zoomer').height() / 2)
+      $(canvas)
+        .on('mousemove.color', function(e) {
+          var x = e.pageX
+            , y = e.pageY
+            , d = ctx.getImageData(x, y, 1, 1).data
+            , r = d[0]
+            , g = d[1]
+            , b = d[2]
+            , ir = 255 - r
+            , ig = 255 - g
+            , ib = 255 - b
+            , hex = rgbToHex(r, g, b)
+            , inv = rgbToHex(ir, ig, ib)
 
-        drawCrosshair(crosshair, ir, ig, ib)
-      }).mousedown(function(e) {
-        if (e.which !== 1) return
+          $('#coord').html(x + ' x ' + y).css('color', inv)
+          $('#rgb-hover').val(r + ',' + g + ',' + b)
+          $('#hex-hover').val(hex)
+          $('#color-hover').css('background', hex)
 
-        var x0 = e.clientX
-          , y0 = e.clientY
+          $('#zoomed')
+            .css('left', -(zoom * x) + $('#zoomer').width() / 2)
+            .css('top', -(zoom * y) + $('#zoomer').height() / 2)
 
-        $(this).on('mousemove.dragscroll', function(e) {
-          var $window = $(window)
-            , st = $window.scrollTop()
-            , sl = $window.scrollLeft()
-            , x = e.clientX
-            , y = e.clientY
+          drawCrosshair(crosshair, ir, ig, ib)
+        })
+        .mousedown(function(e) {
+          if (e.which !== 1) return
 
-          $window.scrollTop(st + y0 - y).scrollLeft(sl + x0 - x)
+          var x0 = e.clientX
+            , y0 = e.clientY
 
-          x0 = x
-          y0 = y
+          $(this).on('mousemove.dragscroll', function(e) {
+            var $window = $(window)
+              , x = e.clientX
+              , y = e.clientY
+
+            $window
+              .scrollLeft($window.scrollLeft() + x0 - x)
+              .scrollTop($window.scrollTop() + y0 - y)
+
+            x0 = x
+            y0 = y
+
+            e.preventDefault()
+          })
 
           e.preventDefault()
         })
+        .on('mouseup mouseleave', function() {
+          $(this).off('mousemove.dragscroll')
+        })
+        .contextmenu(function() {
+          $('#rgb-saved').val($('#rgb-hover').val())
+          $('#hex-saved').val($('#hex-hover').val())
+          $('#color-saved').css('background', $('#hex-hover').val())
 
-        e.preventDefault()
-      }).on('mouseup mouseleave', function() {
-        $(this).off('mousemove.dragscroll')
-      }).contextmenu(function(e) {
-        $('#rgb-saved').val($('#rgb-hover').val())
-        $('#hex-saved').val($('#hex-hover').val())
-        $('#color-saved').css('background', $('#hex-hover').val())
-        return false
-      })
+          return false
+        })
 
       $(window).keydown(function(e) {
         if (e.keyCode == 67 && e.ctrlKey && e.target.tagName !== 'INPUT') {
@@ -188,8 +193,6 @@ $(document).ready(function() {
           setTimeout(function() { hex.blur() }, 100)
         }
       })
-
-      $('#scroller').width(img.width).height(img.height)
     }
     img.src = source
   }
