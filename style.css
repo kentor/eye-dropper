@@ -43,7 +43,7 @@ body {
   position: fixed;
   right: 10px;
   top: 10px;
-  width: 180px;
+  width: 181px;
   z-index: 2;
 }
 
@@ -53,7 +53,7 @@ body {
   background-image: -webkit-linear-gradient(-45deg, #eee 25%, #ddd 25%, #ddd 50%, #eee 50%, #eee 75%, #ddd 75%);
   background-size: 20px 20px;
   border: 1px solid #fff;
-  height: 80px;
+  height: 81px;
   outline: 1px solid #000;
   overflow: hidden;
   position: relative;

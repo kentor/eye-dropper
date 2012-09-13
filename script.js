@@ -16,7 +16,7 @@ function rgbToHex(r, g, b) {
 }
 
 function drawCrosshair(ctx, r, g, b) {
-  ctx.strokeStyle = 'rgba(' + r + ',' + g + ',' + b + ',0.5)'
+  ctx.strokeStyle = 'rgba(' + r + ',' + g + ',' + b + ',0.25)'
   ctx.beginPath()
   ctx.moveTo(5.5, 0)
   ctx.lineTo(5.5, 4)
@@ -36,7 +36,9 @@ function drawCrosshair(ctx, r, g, b) {
 }
 
 $(document).ready(function() {
-  $(window).resize(function() {
+  var $window = $(window)
+
+  $window.resize(function() {
     var intro = $('#intro')
     intro.css('margin-top', -intro.outerHeight() / 2)
   }).resize()
@@ -55,7 +57,7 @@ $(document).ready(function() {
                          .appendTo('body')
                          .focus()
 
-    $(window).click(function() { pasteCatcher.focus() })
+    $window.click(function() { pasteCatcher.focus() })
   } 
 
   window.addEventListener('paste', function(e) {
@@ -146,8 +148,8 @@ $(document).ready(function() {
           $('#color-hover').css('background', hex)
 
           $('#zoomed')
-            .css('left', -(zoom * x) + $('#zoomer').width() / 2)
-            .css('top', -(zoom * y) + $('#zoomer').height() / 2)
+            .css('left', -(zoom * x) + ($('#zoomer').width() - 3) / 2)
+            .css('top', -(zoom * y) + ($('#zoomer').height() - 3) / 2)
 
           drawCrosshair(crosshair, ir, ig, ib)
         })
@@ -158,8 +160,7 @@ $(document).ready(function() {
             , y0 = e.clientY
 
           $(this).on('mousemove.dragscroll', function(e) {
-            var $window = $(window)
-              , x = e.clientX
+            var x = e.clientX
               , y = e.clientY
 
             $window
@@ -185,7 +186,7 @@ $(document).ready(function() {
           return false
         })
 
-      $(window).keydown(function(e) {
+      $window.keydown(function(e) {
         if (e.keyCode == 67 && e.ctrlKey && e.target.tagName !== 'INPUT') {
           var hex = document.getElementById('hex-hover')
           hex.focus()
