@@ -36,19 +36,10 @@ function drawCrosshair(ctx, r, g, b) {
 }
 
 $(document).ready(function() {
-  var _mouseDown = false
-
   $(window).resize(function() {
     var intro = $('#intro')
     intro.css('margin-top', -intro.outerHeight() / 2)
-  }).resize().mousedown(function(e) {
-    _mouseDown = true
-    _x0 = e.clientX
-    _y0 = e.clientY
-    e.preventDefault()
-  }).on('mouseup mouseleave', function() {
-    _mouseDown = false
-  })
+  }).resize()
 
   $('#info').draggable().find('input').click(function() {
     this.select()
@@ -135,7 +126,7 @@ $(document).ready(function() {
         $(this).find('input').blur()
       })
 
-      $(canvas).mousemove(function(e) {
+      $(canvas).on('mousemove.color', function(e) {
         var x = e.pageX
           , y = e.pageY
           , d = ctx.getImageData(x, y, 1, 1).data
@@ -158,17 +149,30 @@ $(document).ready(function() {
           .css('top', -(zoom * y) + $('#zoomer').height() / 2)
 
         drawCrosshair(crosshair, ir, ig, ib)
+      }).mousedown(function(e) {
+        if (e.which !== 1) return
 
-        if (_mouseDown) {
+        var x0 = e.clientX
+          , y0 = e.clientY
+
+        $(this).on('mousemove.dragscroll', function(e) {
           var $window = $(window)
             , st = $window.scrollTop()
             , sl = $window.scrollLeft()
+            , x = e.clientX
+            , y = e.clientY
 
-          $window.scrollTop(st + _y0 - e.clientY).scrollLeft(sl + _x0 - e.clientX)
+          $window.scrollTop(st + y0 - y).scrollLeft(sl + x0 - x)
 
-          _x0 = e.clientX
-          _y0 = e.clientY
-        }
+          x0 = x
+          y0 = y
+
+          e.preventDefault()
+        })
+
+        e.preventDefault()
+      }).on('mouseup mouseleave', function() {
+        $(this).off('mousemove.dragscroll')
       }).contextmenu(function(e) {
         $('#rgb-saved').val($('#rgb-hover').val())
         $('#hex-saved').val($('#hex-hover').val())
