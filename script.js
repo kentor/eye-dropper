@@ -39,7 +39,7 @@ function drawCrosshair(r, g, b) {
 $(document).ready(function() {
   var $window = $(window)
 
-  $window
+  $('#source')
   .mousedown(function(e) {
     if (e.which !== 1) return
 
@@ -60,6 +60,8 @@ $(document).ready(function() {
     })
     e.preventDefault()
   })
+
+  $window
   .mouseup(function() {
     $window.off('mousemove')
   })
