@@ -66,7 +66,7 @@ $(document).ready(function() {
     $window.off('mousemove')
   })
   .keydown(function(e) {
-    if (e.ctrlKey && e.keyCode == 67 && e.target.tagName !== 'INPUT') {
+    if (e.metaKey && e.keyCode == 67 && e.target.tagName !== 'INPUT') {
       var hex = document.getElementById('hex-hover')
       hex.focus()
       hex.select()
