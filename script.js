@@ -88,7 +88,7 @@ $(document).ready(function() {
                        .focus()
 
     $window.click(function() { pasteCatcher.focus() })
-  } 
+  }
 
   window.addEventListener('paste', function(e) {
     if (e.clipboardData) {
@@ -96,11 +96,11 @@ $(document).ready(function() {
 
       for (var i = 0; i < items.length; i++) {
         if (!items[i].type.match(/image/)) continue
-          
+
         var blob = items[i].getAsFile()
           , urlobj = window.URL || window.webkitURL
           , source = urlobj.createObjectURL(blob)
-         
+
         createImage(source)
       }
     }
@@ -109,7 +109,7 @@ $(document).ready(function() {
         var child = pasteCatcher.find('img')[0]
 
         pasteCatcher.empty()
-       
+
         if (child) createImage(child.src)
       }, 0)
     }
@@ -124,7 +124,7 @@ $(document).ready(function() {
     if (files.length && files[0].type.match(/image/)) {
       var urlobj = window.URL || window.webkitURL
         , source = urlobj.createObjectURL(files[0])
-        
+
       createImage(source)
     }
   })
